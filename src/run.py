@@ -2,46 +2,17 @@
 
 import vlc
 import datetime as dt
+import os
 
-triads = [(dt.time(hour = 4 * i), dt.time(hour = (4 * i) + 3, minute = 59, second = 59)) for i in range(6)]
-playlist = ["file" + str(i) + ".mp4" for i in range(6)]
-#player = vlc.Instance.media_player_new()
+folder = input("Enter path to directory")
+playlist = os.listdir(folder)
+n = len(playlist)
+d = 24 // n
+intervals = [(dt.time(hour = d * i), dt.time(hour = (d * i) + (d - 1), minute = 59, second = 59)) for i in range(n)]
 
-while True:
-	rn = dt.datetime.now().time()
+rn = dt.datetime.now().time()
 
-	if rn > triads[0][0] and rn < triads[0][1]:
-		# media playback
-		player = vlc.MediaPlayer(playlist[0])
-		player.play()
-		#media = vlc.Instance.media_new("")
-	elif rn > triads[1][0] and rn < triads[1][1]:
-		# media Playback
-		player = vlc.MediaPlayer(playlist[1])
-		player.play()
-		#media = vlc.Instance.media_new("")
-	elif rn > triads[2][0] and triads[2][1]:
-		# media playback
-		player = vlc.MediaPlayer(playlist[2])
-		player.play()
-		#media = vlc.Instance.media_new("")
-	elif rn > triads[3][0] and triads[3][1]:
-		# media playback
-		player = vlc.MediaPlayer(playlist[3])
-		player.play()
-		#media = vlc.Instance.media_new("")
-	elif rn > triads[4][0] and triads[4][1]:
-		# media playback
-		player = vlc.MediaPlayer(playlist[4])
-		player.play()
-		#media = vlc.Instance.media_new("")
-	elif rn > triads[5][0] and triads[5][1]:
-		# media playback
-		player = vlc.MediaPlayer(playlist[5])
-		player.play()
-		#media = vlc.Instance.media_new("")
-	else:
-		print("[WARN] Somehow out of range")
+res = list(map(lambda y: rn > y[0] and rn < y[1], intervals)).index(True)
 
-	#player.set_media(media)
-	#player.play()
+player = vlc.MediaPlayer(playlist[res])
+player.play()
